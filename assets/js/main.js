@@ -192,3 +192,42 @@
   window.addEventListener("load", initSwiper);
 
 })();
+document.addEventListener("DOMContentLoaded", () => {
+  const contadores = document.querySelectorAll(".contador");
+  let animado = false; // Controla si la animación ya se ejecutó
+
+  const iniciarAnimacion = () => {
+    contadores.forEach((contador) => {
+      const actualizarContador = () => {
+        const valorFinal = parseInt(contador.getAttribute("data-valor"));
+        const valorActual = parseInt(contador.innerText);
+
+        // Ajustar el incremento para animación lenta
+        const incremento = Math.ceil(valorFinal / 200); // Más pequeño para mayor lentitud
+
+        if (valorActual < valorFinal) {
+          contador.innerText = valorActual + incremento;
+          setTimeout(actualizarContador, 50); // Aumentar el tiempo para mayor lentitud
+        } else {
+          contador.innerText = valorFinal; // Asegura que no exceda el valor final
+        }
+      };
+
+      actualizarContador();
+    });
+  };
+
+  const detectarScroll = () => {
+    const seccion = document.querySelector(".experiencia");
+    const posicionSeccion = seccion.getBoundingClientRect().top;
+    const alturaVentana = window.innerHeight;
+
+    if (posicionSeccion < alturaVentana && !animado) {
+      animado = true; // Evita que se repita la animación
+      iniciarAnimacion();
+    }
+  };
+
+  window.addEventListener("scroll", detectarScroll);
+});
+
